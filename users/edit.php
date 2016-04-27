@@ -34,7 +34,7 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
             $error['introduction'] = 'blank';
             // $error配列のnick_nameキーにblankという値を代入
         }
-      }
+      
 
 
           if(isset($_FILES)){
@@ -58,7 +58,7 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
                   }
                 }
 
-if (!empty($_POST) && empty($error)) {
+                  if (empty($error)) {
                   // 画像をサーバーへアップロードする処理
                   // 単に登録する画像の名前の文字列を他と絶対にかぶらない形で
                   // 変数に代入する
@@ -83,7 +83,7 @@ if (!empty($_POST) && empty($error)) {
                    //header('Location: index.php');
                    //exit();
                  }
-                
+                }
                 
 
 ?>
@@ -202,7 +202,7 @@ if (!empty($_POST) && empty($error)) {
       <input id="textinput" name="nick_name" type="text" placeholder="your new name " class="form-control input-md" value="<?php echo $member['nick_name']; ?>">
       <?php if(!empty($error['nick_name'])): ?>
           <?php if($error['nick_name'] == 'blank'): ?>
-              <p class="error">ニックネームを入力してください。</p>
+              <p class="error">ニックネームを入力してください</p>
           <?php endif; ?>
       <?php endif; ?>
 
