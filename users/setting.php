@@ -1,99 +1,38 @@
 <?php
-  session_start();
-  require('../dbconnect.php');
-  require('../functions.php');
-  // 仮のログインユーザーデータ
-  $_SESSION['id'] = 1;
-  $_SESSION['time'] = time();
-  // ログイン判定
-  if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
-      $_SESSION['time'] = time();
-      $sql = sprintf('SELECT * FROM members WHERE id=%d',
-              mysqli_real_escape_string($db, $_SESSION['id'])
-      );
-      $record = mysqli_query($db, $sql) or die(mysqli_error($db));
-      // ログインしているのユーザーのデータ
-      $member = mysqli_fetch_assoc($record);
-  } else {
-      header('Location: signin.php');
-      exit();
-  }
+    // 外部ファイルの読み込み
+    require('../dbconnect.php');
+    require('../functions.php');
+    // 仮のログインユーザーデータ
+    $_SESSION['id'] = 1;
+    $_SESSION['time'] = time();
+    // ログイン判定
+    if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
+        $_SESSION['time'] = time();
+        $sql = sprintf('SELECT * FROM members WHERE id=%d',
+             mysqli_real_escape_string($db, $_SESSION['id'])
+        );
+        $record = mysqli_query($db, $sql) or die(mysqli_error($db));
+        // ログインしているのユーザーのデータ
+        $member = mysqli_fetch_assoc($record);
+        } 
+      else {
+        header('Location: signin.php');
+        exit();
+    }
 
-      $error = array();
-        // echo 'ほげ1';
-        if(isset($_POST) && !empty($_POST)) {
-        // echo 'ほげ2';
-
-          
-              // バリデーション
-              // エラー項目の確認
-              if ($_POST['nick_name'] == '') {
-                  // もし$_POST内のnick_name部分が空だったら処理
-                  $error['nick_name'] = 'blank';
-                  // $error配列のnick_nameキーにblankという値を代入
-              }
-              if ($_POST['introduction'] == '') {
-                  $error['introduction'] = 'blank';
-              }
-            
-        
-              if(isset($_FILES['image'])) {
-
-                  // 写真のエラー文
-                  // if文で$_FILES['image']['name']が空でなければ処理
-                  if (!empty($_FILES['image']['name'])) {
-
-                      $fileName = $_FILES['image']['name'];
-                          // $_FILESはinputタグのtypeがfileの時に生成される
-                          // スーパーグローバル変数です
-                           // echo $fileName;
-                      if (!empty($fileName)) {
-                          $ext = substr($fileName, -3);
-                          
-                          if ($ext != 'jpg' && $ext != 'png') {
-                              $error['image'] = 'type';
-                          }
-                      }
-                  }              
-              }
-              
-                  
-                  // 画像の名前作成 $imageの作成
-              
-
-                  if (empty($error)) {
-
-                      if (!empty($_FILES['image']['name'])) {
-                      
-                      // if文で$_FILES['image']['name']が空でなければ処理
-                          // 画像が選択されている際のアップデート処理
-                          $image = date('YmdHis') . $_FILES['image']['name'];
-                          move_uploaded_file($_FILES['image']['tmp_name'],'member_picture/' . $image);
-                          $sql = sprintf('UPDATE `members` SET `nick_name`="%s", `introduction`="%s", `picture_path`="%s" WHERE `id`=%d',
-                                      $_POST['nick_name'],
-                                      $_POST['introduction'],
-                                      $image,
-                                      $_SESSION['id']
-                                  );
-                      } else { 
-                      // elseの場合は
-                          $sql = sprintf('UPDATE `members` SET `nick_name`="%s", `introduction`="%s", WHERE `id`=%d',
-                                      $_POST['nick_name'],
-                                      $_POST['introduction'],
-                                      $_SESSION['id']
-                                  );
-                      }
-                  }
-
-                      mysqli_query($db, $sql) or die(mysqli_error($db)); 
-
-                      header('Location: view.php');
-                      
-                  
-        }         
-            
-// }  
+    if (isset($_POST) && !empty($_POST)){
+      
+        $sql = sprintf('UPDATE `members` SET `email`="%s", `password`="%s" WHERE `id`=%d',$_POST['email'],
+            $_POST['password'],
+            $_SESSION['id']
+        );
+        mysqli_query($db, $sql) or die(mysqli_error($db));
+        header('Location:index.php');
+      }
+    
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -120,12 +59,20 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a href="/" class="navbar-brand">Photovote</a>
+        <a href="/" class="navbar-brand">Photovite</a>
       </div>
       <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="new.html">新規投稿</a></li>
             <li><a href="index.php">会員一覧</a></li>
+             <!-- <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">DropDown
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Link 2</a></li>
+                </ul>
+             </li>   -->            
           </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
@@ -147,8 +94,7 @@
                       <p class="text-left"><strong><?php echo $member['nick_name']; ?></strong></p>
                       <p class="text-left small"><?php echo $member['introduction']; ?></p>
                       <p class="text-left">
-                        <a href="view.php" class="btn btn-primary btn-block btn-sm">マイプロフィール</a>
-                        <a href="setting.php" class="btn btn-primary btn-block btn-sm">設定</a>
+                        <a href="#" class="btn btn-primary btn-block btn-sm">設定</a>
                       </p>
                     </div>
                   </div>
@@ -173,16 +119,10 @@
     </div>
     </div>
 
-<form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+<form method="post" action="" class="form-horizontal" role="form">
 <div id="container">
   <div class="imgInput">
       <img src="member_picture/<?php echo $member['picture_path']; ?>" alt="" class="imgView" width="100px" height="100px"><br>
-          <input type="file" name="image"><br>
-          <?php if(!empty($error['image'])): ?>
-          <?php if($error['image'] == 'type'): ?>
-            <p class="error">* 写真は「jpg」または「png」形式で指定してください。</p>
-          <?php endif; ?>
-        <?php endif; ?> 
   </div><!--/.imgInput-->
 </div>
 
@@ -197,51 +137,41 @@
         コンテンツ
     -->
         <div class="container">
-    <form class="form-horizontal">
     <fieldset>
 
     <!-- Form Name -->
-    <legend>My Profile Setting</legend>
-
+    <legend>My Accout Setting</legend>
       <div class="form-group">
-      <label class="col-md-4 control-label" for="textinput">Nickname</label>  
+      <label class="col-md-4 control-label" for="textinput">email</label>  
       <div class="col-md-4">
-      <input id="textinput" name="nick_name" type="text" placeholder="New Nickname " class="form-control input-md" value="<?php echo $member['nick_name']; ?>">
-      <?php if(!empty($error['nick_name'])): ?>
-          <?php if($error['nick_name'] == 'blank'): ?>
-              <p class="error">ニックネームを入力してください。</p>
-          <?php endif; ?>
-      <?php endif; ?>  
+      <input id="textinput" name="email" type="email" placeholder="your new email" class="form-control input-md" value="<?php echo $member['email']; ?>">
       </div>
     </div>
    
 
     <!-- Select Multiple -->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="selectmultiple">About Me</label>
+<!-- <div class="form-group">
+  <label class="col-md-4 control-label" for="selectmultiple">pass</label>
   <div class="col-md-4">
-    <textarea name="introduction" class="form-control" multiple="multiple" placeholder="About Me"><?php echo $member['introduction']; ?>
-    </textarea>
-    <?php if(!empty($error['introduction'])): ?>
-        <?php if($error['introduction'] == 'blank'): ?>
-            <p class="error">自己紹介を入力してください。</p>
-        <?php endif; ?>
-    <?php endif; ?>
-  </div>
+    <input id="textinput" name="password" type="password" placeholder="your new pass" class="form-control input-md" value="<?php echo $member['password']; ?>">
+    </div>
+</div> -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectmultiple">password</label>
+  <div class="col-md-4">
+    <input id="textinput" name="password" type="password" placeholder="your new pass" class="form-control input-md" value="<?php echo $member['password']; ?>">
+    </div>
 </div>
 
 
-
  <!-- Button -->
-    <div class="form-group">
+<div class="form-group">
       <label class="col-md-4 control-label" for="singlebutton"></label>
       <div class="col-md-4">
-         <input type="submit" value="Save" name="singlebutton" class="btn btn-info pull-right" >
-         <a href="view.php" name="singlebutton" class="btn pull-right btn-warning" value="Back">Back</a>
+        <input type="submit" value="Save" name="singlebutton" class="btn btn-info pull-right" >
       </div>
     </div>
 </form>
-
     <!-- Button -->
    <!--  <div class="form-group">
       <label class="col-md-4 control-label" for="singlebutton">Remove my account</label>

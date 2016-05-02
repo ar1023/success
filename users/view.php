@@ -42,6 +42,8 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
 	// $members = mysqli_fetch_assoc($photos);
 
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +74,7 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
       <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="new.html">新規投稿</a></li>
-            <li><a href="users/index.html">会員一覧</a></li>
+            <li><a href="index.php">会員一覧</a></li>
              <!-- <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">DropDown
                 <span class="caret"></span>
@@ -86,7 +88,7 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <span class="glyphicon glyphicon-user"></span> 
-                <strong>nick_name</strong>
+                <strong><?php echo $member['nick_name']; ?></strong>
                 <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
             <ul class="dropdown-menu">
@@ -99,10 +101,10 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
                       </p>
                     </div>
                     <div class="col-lg-8">
-                      <p class="text-left"><strong>nick_name</strong></p>
-                      <p class="text-left small">email</p>
+                      <p class="text-left"><strong><?php echo $member['nick_name']; ?></strong></p>
+                      <p class="text-left small"><?php echo $member['introduction']; ?></p>
                       <p class="text-left">
-                        <a href="#" class="btn btn-primary btn-block btn-sm">マイプロフィール</a>
+                        <a href="setting.php" class="btn btn-primary btn-block btn-sm">設定</a>
                       </p>
                     </div>
                   </div>
@@ -127,24 +129,36 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
     </div>
     </div>
 
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+ <!--    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     	<div class="container">
     		<div class="fb-profile">
-    			<img align="left" class="fb-image-profile thumbnail" src="../member_picture/<?php echo ($member['picture_path']); ?>" alt="Profile image example"/>
+    			<img align="left" class="fb-image-profile thumbnail" src="member_picture/<?php echo ($member['picture_path']); ?>" alt="Profile image example"/>
     		<div class="fb-profile-text"> 
     			<h1><?php echo ($member['nick_name']); ?></h1>
-    				<a href="edit.php" class="btn-sm pull-right btn-warning">Edit</a>
+    				<a href="edit.php" class="btn-sm pull-right btn-danger">Edit</a>
     				<a href="index.php" class="btn-sm pull-right btn-warning">Home</a>
     			<h5><?php echo ($member['introduction']); ?></h5> 
 				</div>
 				</div>
-			</div> <!-- /container -->
+			</div> --> <!-- /container -->
 
+      <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+      <div class="container">
+        <div class="fb-profile">
+          <!-- <img align="left" class="fb-image-lg" src="member_picture/<?php echo ($member['picture_path']); ?>" alt="Profile image example"/> -->
+          <img align="left" class="fb-image-profile thumbnail" src="member_picture/<?php echo ($member['picture_path']); ?>" alt="Profile image example"/>
+          <div class="fb-profile-text">
+            <h1><?php echo ($member['nick_name']); ?></h1>
+            <p><?php echo ($member['introduction']); ?></p>
+            <a href="edit.php" class="btn pull-right btn-danger">Edit</a>
+            <a href="index.php" class="btn pull-right btn-warning">Home</a>
+          </div>
+        </div>
+      </div><!-- /container -->
     <!-- 
         =======================================================
         コンテンツ
     -->
-
     <!-- 
         =======================================================
         フッター
