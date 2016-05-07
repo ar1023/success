@@ -82,7 +82,7 @@
     </div>
     </div>
 
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'> <div class="container"> <div class="fb-profile">  <img align="left" class="fb-image-profile thumbnail" src="http://lorempixel.com/180/180/people/9/" alt="Profile image example"/> <div class="fb-profile-text"></div> </div> </div> <!-- /container -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'> <div class="container"> <div class="fb-profile">  <img align="left" class="fb-image-profile thumbnail" src="http://lorempixel.com/180/180/people/9/" alt="Profile image example"/> <div class="fb-profile-text">  <br><br><br><br><br><input type="file" name="image"></div> </div> </div> <!-- /container -->
 
   
 
@@ -95,9 +95,14 @@
     <fieldset>
 
     <!-- Form Name -->
-    <legend>My Account Setting</legend>
+    <legend>My Profile Setting</legend>
 
-      
+      <div class="form-group">
+      <label class="col-md-4 control-label" for="textinput">Change Name</label>  
+      <div class="col-md-4">
+      <input id="textinput" name="textinput" type="text" placeholder="your new name " class="form-control input-md">  
+      </div>
+    </div>
 
     <!-- Text input-->
     <div class="form-group">
@@ -126,6 +131,17 @@
     </div>
 
    
+
+    <!-- Select Multiple -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectmultiple">About Me</label>
+  <div class="col-md-4">
+    <textarea name="selectmultiple" class="form-control" multiple="multiple" placeholder="About me">
+      
+    
+    </textarea>
+  </div>
+</div>
 
  <!-- Button -->
     <div class="form-group">
